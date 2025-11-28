@@ -83,6 +83,10 @@ CHANNEL_LAYERS = {
     },
 }
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://messenger4report.onrender.com',
+    'https://*.onrender.com',
+]
 
 
 # Database
