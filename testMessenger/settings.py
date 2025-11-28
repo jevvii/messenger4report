@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,8 +25,12 @@ SECRET_KEY = 'django-insecure-6jkx_+bhly6!x6%b8)ec#2cekwo421ihx22sab9!sis0hw(be2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '.onrender.com']
 
+REDIS_URL = os.environ.get(
+    "REDIS_URL",
+    "rediss://default:AXYqAAIncDJhZjFhMzFlNzQ4ZjM0ZTEyYjM4OTkzNWMyZDE3Y2M5NXAyMzAyNTA@blessed-mouse-30250.upstash.io:6379",
+)
 
 # Application definition
 
@@ -71,8 +75,14 @@ TEMPLATES = [
 
 ASGI_APPLICATION = 'testMessenger.wsgi.application'
 CHANNEL_LAYERS = {
-    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [REDIS_URL],
+        },
+    },
 }
+
 
 
 # Database
